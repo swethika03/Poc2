@@ -31,26 +31,10 @@ provisioner "remote-exec" {
 "sudo dnf install docker -y",
 "sudo systemctl enable docker",
 "docker --version",
-"sudo dnf install -y redis6",
-"sudo systemctl enable redis6",
-"sudo systemctl is-enabled redis6",
-"redis6-server --version"  
    ]
     }  
   }
-  # Creating RDS instance
-resource "aws_db_instance" "RDS_DB" {
-  identifier           = "database-1"
-  engine               = "mysql"
-  engine_version       = "5.7"
-  instance_class       = "db.t2.micro"  
-  username             = "Swethika"
-  password             = "admin"
-  allocated_storage    = 20
-  parameter_group_name = "default.mysql5.7"
-  skip_final_snapshot  = true
-  db_name = "multi_db"
-}
+ 
 #Create the keypair the  of applications
 resource "aws_key_pair" "keypair" {
   key_name   = "keypair"
@@ -97,13 +81,7 @@ resource "aws_security_group" "allow_ssh" {
     protocol    = "tcp"
     cidr_blocks = ["0.0.0.0/0"]
   }
-  ingress {
-    # Its allow to connect RDS instance
-    from_port   = 3306
-    to_port     = 3306
-    protocol    = "tcp"
-    cidr_blocks = ["0.0.0.0/0"]
-  }
+
   egress {
     from_port   = 0
     to_port     = 0
